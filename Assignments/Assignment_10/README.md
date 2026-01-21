@@ -1,2 +1,2 @@
-Basic understanding of loops in python :for loop , range() function
+Basic understanding of loops in python 
 
