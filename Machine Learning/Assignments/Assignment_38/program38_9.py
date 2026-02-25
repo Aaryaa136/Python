@@ -1,0 +1,91 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load the dataset
+Dataset = "student_performance_ml.csv"
+df = pd.read_csv(Dataset)
+
+print("First five records : ")
+print(df.head())
+
+print("Last five records : ")
+print(df.tail())
+
+print("Shape of dataset : ",df.shape)
+
+print("Attributes : ",list(df.columns))
+
+print("Type of attributes : ")
+print(df.dtypes)
+
+print("Total number of students : ",len(df))   # df.shape[0]
+
+passed = (df["FinalResult"] == 1).sum()
+failed = (df["FinalResult"] == 0).sum()
+print("Total number of students passed : ",passed)
+print("Total number of failed student : ",failed)
+
+print("Average study hours : ",(df["StudyHours"]).mean())
+print("Average attendence of students : ",(df["Attendance"]).mean())
+print("Maximum previous score is : ",(df["PreviousScore"]).max())
+print("Minimum sleep hour is : ",(df["SleepHours"]).min())
+
+print("Distribution of label : ")
+
+pass_percentage = (passed / len(df)) * 100
+failed_percentage = (failed / len(df)) * 100
+
+print(df["FinalResult"].value_counts())
+print("Pass percentage : ",pass_percentage,"%")
+print("Failed percentage : ",failed_percentage,"%")
+
+'''
+Study Hours plays a crucial factor :  high number of study hours 
+                                      makes higher chance of passing
+Study hours below 4.5 hours : less chance of passing
+
+Yes , higher attendance improves Final Result
+According to my observation attendance more than 75%  increases chances of passing exam                                    
+
+'''
+
+sns.histplot(df["StudyHours"])
+plt.show()
+
+'''
+Average study hours is 4 to 6 hours
+Many students studied for an hour only : fail
+Max study hours was 8 to 9 hrs : pass
+'''
+
+sns.scatterplot(data = df , x = df["StudyHours"] , y = df["PreviousScore"] , hue = "FinalResult" , palette={0 : "red" , 1 : "green"})
+plt.title("Study Hours Vs Previous marks")
+plt.xlabel("Study hrs")
+plt.ylabel("Previous marks %")
+plt.legend()
+plt.grid()
+plt.show()
+
+'''
+Studyhours and previous marks are in proportion
+Less study hours : fail 
+'''
+
+# no outliers present
+sns.boxplot(df["Attendance"])
+plt.show()
+
+plt.figure(figsize=(8,5))
+sns.stripplot(data = df , x = "AssignmentsCompleted" , y = "FinalResult" , hue = "FinalResult" , palette={0 : "red" , 1 : "green"}, jitter=0.2)
+plt.title("Assignment completed vs Result")
+plt.xlabel("Assignments completed")
+plt.ylabel("Result")
+plt.legend()
+plt.grid()
+plt.show()
+
+''''
+Less assignments student have failed ,
+Students who have sloved more thann 5 assignmemts have passed 
+'''
